@@ -71,7 +71,8 @@ The structure of the record type is:
 
        struct {
            CertificateEntry certificate_list<0..2^24-1>;
-           SemiStaticKeyShareEntry semi_static_shares<0..2^16-1>;
+           SemiStaticKeyShareEntry semi_static_shares<1..2^16-1>;
+           CipherSuite cipher_suites<2..2^16-2>;
            SignatureScheme signature_algorithm;
            opaque signature<0..2^16-1>;
        } TLSBootstrapRecord;
@@ -85,6 +86,12 @@ The value is transmitted from the client to the server during the TLS handshake 
 
 certificate_list
 : The certificate chain of the server certificate along with extensions to verify the validity of the certificate (e.g., OCSP Status extensions ([RFC6066], [RFC6961])).
+
+semi_static_shares
+: list of key_shares that the server offers to the client
+
+cipher_suites
+: list of cipher-suites that the server is willing to accept
 
 signature
 : The signature is a digital signature using the algorithm specified in the signature_algorithm field. The digital signature covering from the beginning of the structure to the end of the signature_algorithm field.
@@ -100,8 +107,10 @@ The two DNS queries can be issued simultaneously.
 Once the client obtains the IP address of the server and also the TLS-Bootstrap DNS Resource Record, it MUST verify the certificate chain and the signature of the TLS-Bootstrap DNS Resource record.
 After a successful verification, the client will connect to the server and start a TLS 1.3 handshake, by sending a ClientHello handshake message with the following changes.
 
-* The "key-share" Extension MUST include exactly one KeyShareEntry.
+* The "key-share" extension MUST include exactly one KeyShareEntry.
 The algorithm of the KeyShareEntry MUST be one among the semi-static key shares offered by the server through the TLS-Bootstrap DNS Resource Record.
+* The "cipher_suite" field MUST include exactly one cipher-suite.
+It should be one among the cipher-suites offered by the server through the TLS-Bootstrap DNS Resource Record.
 * The Server Name Indication Extension MUST NOT be used.
 * The Semi-Static Key Share Extension and the EncryptedSNI Extension MUST be used.
 
@@ -135,7 +144,6 @@ The extension contains the Server Name Indication Extension encrypted using a sh
        struct {
            select (Handshake.msg_type) {
                case client_hello:
-                   CipherSuite cipher_suite;
                    opaque encrypted_payload<0..2^16-1>;
                case encrypted_extensions:
                    Empty;
@@ -149,7 +157,7 @@ cipher_suite
 : The AEAD algorithm and the hash algorithm to encrypted the encrypted_payload
 
 encrypted_payload
-: Contains a PlaintextEncryptedSNI structure encrypted using the selected cipher-suite.
+: Contains a PlaintextEncryptedSNI structure encrypted using the only cipher-suite specified by the "cipher_suites" field of the ClientHello message.
 
 The key that is being used for protecting the encrypted_payload is calculated as follows by using the HKDF functions [RFC5869], whereas the semi_static_master_key being calculated by applying HKDF-Extract to the result of the (EC)DH key exchange with an empty salt.
 
