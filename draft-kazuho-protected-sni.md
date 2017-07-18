@@ -29,6 +29,7 @@ normative:
 informative:
   RFC6797:
   RFC6961:
+  RFC7301:
   RFC7924:
 
 --- abstract
