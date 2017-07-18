@@ -176,6 +176,8 @@ If a client observes an EncryptedExtension handshake message with a Semi-Static 
 
 We should consider extending HTTP Strict Transport Security [RFC6797] so that the servers can enforce the client the use of the Encrypted SNI extension.
 
+We might want to refactor the proposed method to send an arbitrary number of extensions protected within a ClientHello message, rather than just encrypting the Server Name Indication extension.
+
 We might want to consider using the semi-static key introduced in this memo for other purposes.
 For example, it would be possible to use the key to invoke a 0-RTT handshake even when resumption is impossible.
 
