@@ -172,14 +172,13 @@ A server MUST send an empty EncryptedSNI extension using the EncryptedExtension 
 
 If a client observes an EncryptedExtension handshake message with a Semi-Static Key Share Extension but without a Encrypted SNI extension in response to a ClientHello message containing an Encrypted SNI extension, it MUST abort the handshake by sending a "handshake_failure" alert.
  
-# Future Works
+# Things to Consider
 
 We should consider extending HTTP Strict Transport Security [RFC6797] so that the servers can enforce the client the use of the Encrypted SNI extension.
 
 We might want to refactor the proposed method to send an arbitrary number of extensions protected within a ClientHello message, rather than just encrypting the Server Name Indication extension.
-
-We might want to consider using the semi-static key introduced in this memo for other purposes.
-For example, it would be possible to use the key to invoke a 0-RTT handshake even when resumption is impossible.
+Doing so opens up the possibilty of protected more types of extensions such as the Application-Layer Protocol Negotiation Extension [RFC7301].
+Or, it would be possible to use the key to invoke a 0-RTT handshake even when resumption is impossible.
 
 # Security Considerations
 
