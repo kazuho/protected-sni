@@ -119,7 +119,7 @@ The extension identifies the semi-static (EC)DH key that was being selected by t
            }
        } SemiStaticKeyShare;
 
-A server MUST abort the terminate the handshake with a "unknown-semi-static-key" alert if it find an unknown or an invalid cookie in the extension.
+A server MUST abort the handshake with a "unknown-semi-static-key" alert if it find an unknown or an invalid cookie in the extension.
 A server MUST send an empty Semi-Static Key Share Extension in the EncryptedExtensions handshake message, when the extension appeared in the ClientHello handshake message.
 
 ## Encrypted SNI Extension
