@@ -97,7 +97,8 @@ For example, if a server hosts three server names: example.com, example.org, exa
 When a client attempts to connect to a server, it at first queries the DNS resolver to obtain the TLS-Bootstrap DNS Resource Record as well as the IP address of the server.
 The two DNS queries can be issued simultaneously.
 
-Once the client obtains the IP address of the server and also the TLS-Bootstrap DNS Resource Record, it will connect to the server and start a TLS 1.3 handshake, by sending a ClientHello handshake message with the following changes.
+Once the client obtains the IP address of the server and also the TLS-Bootstrap DNS Resource Record, it MUST verify the certificate chain and the signature of the TLS-Bootstrap DNS Resource record.
+After a successful verification, the client will connect to the server and start a TLS 1.3 handshake, by sending a ClientHello handshake message with the following changes.
 
 * The "key-share" Extension MUST include exactly one KeyShareEntry.
 The algorithm of the KeyShareEntry MUST be one among the semi-static key shares offered by the server through the TLS-Bootstrap DNS Resource Record.
