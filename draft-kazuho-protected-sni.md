@@ -184,7 +184,12 @@ For example, it would be possible to use the key to invoke a 0-RTT handshake eve
 
 # Security Considerations
 
-TBD
+By using the value of the cookie, servers MUST detect and reject the use of outdated TLS-Bootstrap DNS Resource Records.
+Otherwise, an attacker might be able to inject an old record to force the peers to agree on using a key-share or a cipher-suite that has turned out to be vulnerable after the record was published on the authoritative server.
+
+The injection of malformed or outdated TLS-Bootstrap DNS Resource Record can be used as an attack vector to cause denial-of-service attacks, since misuse of such records by a client ends up in a TLS handshake failure.
+However, it could be argued that injection of a wrong A record will essentially have the same effect in terms of denial-of-service attacks.
+In other words, use of a DNS record to transmit TLS handshake parameters does not make us more prone to attacks.
 
 # IANA Considerations
 
