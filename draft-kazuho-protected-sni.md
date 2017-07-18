@@ -90,9 +90,6 @@ certificate_list
 semi_static_shares
 : list of key_shares that the server offers to the client
 
-cipher_suites
-: list of cipher-suites that the server is willing to accept
-
 signature
 : The signature is a digital signature using the algorithm specified in the signature_algorithm field. The digital signature covering from the beginning of the structure to the end of the signature_algorithm field.
 
