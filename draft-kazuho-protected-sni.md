@@ -1,7 +1,7 @@
 ---
 title: TLS Extensions for Protecting SNI
 abbrev: Protected SNI
-docname: draft-kazuho-protected-sni-latest
+docname: draft-kazuho-protected-sni-00
 date: 2017
 category: std
 
