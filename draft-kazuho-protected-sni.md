@@ -25,12 +25,14 @@ normative:
   RFC5280:
   RFC5869:
   RFC6066:
+  I-D.ietf-tls-tls13:
 
 informative:
   RFC6797:
   RFC6961:
   RFC7301:
   RFC7924:
+  I-D.huitema-tls-sni-encryption:
 
 --- abstract
 
@@ -40,8 +42,8 @@ This memo introduces TLS extensions and a DNS Resource Record Type that can be u
 
 # Introduction
 
-As discussed in SNI Encryption in TLS Through Tunneling {{!I-D.huitema-tls-sni-encryption}}, it is becoming important to protect from observers the name of the server a client is attempting access.
-However, Transport Layer Security (TLS) version 1.3 {{!I-D.ietf-tls-tls13}} transmits the Server Name Indication extension (([RFC6066], section 3) unencrypted.
+As discussed in SNI Encryption in TLS Through Tunneling {{I-D.huitema-tls-sni-encryption}}, it is becoming important to protect from observers the name of the server a client is attempting access.
+However, Transport Layer Security (TLS) version 1.3 {{I-D.ietf-tls-tls13}} transmits the Server Name Indication extension (([RFC6066], section 3) unencrypted.
 
 This memo defines the TLS-Bootstrap DNS Resource Record and two TLS extensions: the Encrypted SNI Extension, the Semi-Static Key Share Extension, that when being used together provides a way to transmit the server name in an encrypted form. 
 
