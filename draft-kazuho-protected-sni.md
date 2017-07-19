@@ -175,11 +175,34 @@ If a client observes an EncryptedExtension handshake message with a Semi-Static 
  
 # Things to Consider
 
-We should consider extending HTTP Strict Transport Security [RFC6797] so that the servers can enforce the client the use of the Encrypted SNI extension.
+## Downgrade Attack Protection
+
+Attackers might want to block the transmission of a TLS-Bootstrap Record to prevent a server name from being sent in an encrypted form.
+To mitigate such attacks, we should consider extending HTTP Strict Transport Security [RFC6797] so that the servers can enforce the client the use of the Encrypted SNI extension.
+
+## Encrypting Other Extensions
 
 We might want to refactor the proposed method to send an arbitrary number of extensions protected within a ClientHello message, rather than just encrypting the Server Name Indication extension.
 Doing so opens up the possibilty of protected more types of extensions such as the Application-Layer Protocol Negotiation Extension [RFC7301].
 Or, it would be possible to use the key to invoke a 0-RTT handshake even when resumption is impossible.
+
+## Mitigating Short-term Performance Impact
+
+Today, most DNS requests / responses are sent using UDP in cleartext.
+That fact has two impacts on the proposed method.
+
+Firstly, transmitting a TLS-Bootstrap Record will require multiple roundtrips, since the record is unlikely to fit in a single packet.
+Secondly, the merit of hiding the server name that appears in the ClientHello somewhat diminishes by the fact that the same value might be transmitted unencrypted in the DNS query.
+
+Considering the facts, in might make sense to define the transfer of the certificate and the signature as an optional feature, so that the only mandatory field that needs to be conveyed in the TLS-Bootstrap Record will be the (EC)DH public key and the associated cookie.
+
+It is likely that such a reduced format will fit into a single UDP packet.
+Hence the performance degradation will be negligble considering the fact that the query for the TLS-Bootstrap Record can happen simultaneously with the address resolution.
+
+The downside of the approach will be that the server name would not be protected from an active attacker.
+However, until DNS queries start getting transmitted over an encrypted channel, the risk of such attacks might be very low, considering the fact that server names can be found unencrypted in the DNS packets anyways.
+
+After DNS over secure transport becomes popular, we can start embedding certificates and digital signatures in the TLS-Bootstrap Record to prevent active attacks, as well as start using the semi-static EC(DH) key for other purposes.
 
 # Security Considerations
 
@@ -197,3 +220,7 @@ The TLS ExtensionType Registry will be updated to contain the codepoints for the
 The TLS Alert Registry will be updated to contain the "unknown-semi-static-key" alert.
   
 The DNS Parameters Registry will be updated to contain the codepoint for the TLS-Bootstrap Resource Record Type.
+
+# Acknowledements
+
+Thank you to Subodh Iyengar for suggesting that the certificate chain and the signature could be optional fields of a TLS-Boostrap record.
